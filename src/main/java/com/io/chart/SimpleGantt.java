@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import main.java.com.Job;
 import main.java.com.Scheduler;
+import main.java.com.io.FileIO;
 
 /**
  *
@@ -117,7 +118,7 @@ public class SimpleGantt {
             );
         }
         
-        System.out.println(results.values().toString().replace("[","").replace("]","").replace(", ",""));
+        FileIO.WriteFile(results.values().toString().replace("[","").replace("]","").replace(", ",""));
     }
     
     private static class DataEntry {
