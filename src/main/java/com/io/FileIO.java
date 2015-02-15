@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +23,7 @@ public class FileIO {
     public static boolean WriteFile(String contents)
     {
         boolean success = false;
+        
         
         
         return success;
@@ -74,7 +75,7 @@ public class FileIO {
         
         /** Test for Parsing the File **/
         System.out.println("Parsing Jobs");
-        List<Job> Jobs = FileParser.getJobs(contents);
+        Map<Integer, Job> Jobs = FileParser.getJobs(contents);
         System.out.println("List Length: "+Jobs.size());
         System.out.println("List: "+Jobs.toString());
         
