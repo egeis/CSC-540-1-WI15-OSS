@@ -7,6 +7,7 @@ import java.util.Map;
 import main.java.com.algorithms.*;
 import main.java.com.io.FileIO;
 import main.java.com.io.FileParser;
+import main.java.com.io.chart.SimpleGantt;
 
 /**
  * 
@@ -45,40 +46,53 @@ public class Scheduler {
     
     public static void main(String args[])
     {
-        List<Map<Integer,Job>> work = new ArrayList();
+        List<Map<Integer,Job>> tasks = new ArrayList();
+        String[] paths = {
+            "main/resources/testdata1.txt",
+            "main/resources/testdata2.txt",
+            "main/resources/testdata3.txt"
+        };
         
         if(args.length > 0)
         {
+            paths = args;
+
             //TODO: Handle custom files.
         } else {
-            String[] paths = {
-                "main/resources/testdata1.txt",
-                "main/resources/testdata2.txt",
-                "main/resources/testdata3.txt"
-            };
-        
             for(String path : paths)
             {
                 String contents = FileIO.ReadFile(path);
-                work.add(FileParser.getJobs(contents));
+                tasks.add(FileParser.getJobs(contents));
             }
         }
         
-        //[File [Algorithm id [Job ID, Job Object]]]
-        Map<String, Map<Integer,Job>> completed = new HashMap();
+        Map<String, Map<Integer,Job>> progress = new HashMap();
         
-        int i = 1;
-        for(Map<Integer,Job> map : work)
+        int i = 0;
+        for(Map<Integer,Job> map : tasks)
         {
-            completed.put(i+"-"+FCFS, schedule(FCFS, map));
-            completed.put(i+"-"+FCFS, schedule(SJF, map));
-            completed.put(i+"-"+FCFS, schedule(RR3, map));
-            completed.put(i+"-"+FCFS, schedule(RR5, map));
+            if(map.isEmpty())
+            {
+                i++;
+                continue;
+            }
+            
+            Clock.reset();
+            progress.put(paths[i]+"-"+FCFS, schedule(FCFS, map));
+            
+            Clock.reset();
+            progress.put(paths[i]+"-"+FCFS, schedule(SJF, map));
+            
+            Clock.reset();
+            progress.put(paths[i]+"-"+FCFS, schedule(RR3, map));
+            
+            Clock.reset();
+            progress.put(paths[i]+"-"+FCFS, schedule(RR5, map));
+            
             i++;
         }
         
-//        System.out.println(completed.toString());
-        
-        
+//        System.out.println(progress.toString());
+        SimpleGantt.createCharts(progress);
     }
 }
