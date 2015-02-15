@@ -3,8 +3,6 @@ package main.java.com;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 /**
  * Simulated Process Job.
  * @author Richard Coan
@@ -29,7 +27,10 @@ public class Job {
         this.waitTime = waitTime;
         this.completed = false;
         this.ticks = 0;
-        work.put(counter,0);             
+    }
+
+    public int getTicks() {
+        return ticks;
     }
 
     public int getStart() {
@@ -58,16 +59,17 @@ public class Job {
      */
     public void doTick(long counter)
     {
-        if(++ticks == waitTime)
+        if(start == 0)
+            start = (int) counter;
+        
+        ticks++;
+        
+        if(ticks == waitTime)
         {
             completed = true;
-            finish = ticks;
+            finish = ticks + start;
         }
-        
-        if(start == 0)
-            start = ticks;
-        
-        work.put(counter,ticks);
+        work.put(counter, ticks);
     }
         
     public String toString() {

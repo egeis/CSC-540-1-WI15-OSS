@@ -16,8 +16,8 @@ public class Clock {
      * System Clock
      */
     public static void doTick(Job job) {
-        counter++;
         job.doTick(counter);
+        counter++;
     }
 
     public static long getCounter() {

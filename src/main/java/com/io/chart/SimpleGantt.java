@@ -1,6 +1,8 @@
 package main.java.com.io.chart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import main.java.com.Job;
@@ -39,65 +41,119 @@ public class SimpleGantt {
     
     public static void createCharts(Map<String, Map<Integer,Job>> work)
     {
+        Map<String, String> results = new HashMap();
+        
         for(Entry<String, Map<Integer,Job>> entry : work.entrySet())
         {
             int type = Integer.parseInt(entry.getKey().split("-")[1]);
             String name = getName(type);
             Map<Integer,Job> jobs = entry.getValue();
             
-            //Finished, JobID#
-            Map<Integer, Integer> turnaround = new HashMap();
+            List<DataEntry> col = new ArrayList();
+            int total = 0;
+            int c = 1;
+            double average;
             
-            //Used to Calculate Turn Around Time
+            int size = 0;
+            
+            for(Entry<Integer,Job> child : jobs.entrySet())
+            {
+                Job j = child.getValue();
+                size += j.getTicks();
+            }
+            
+//            System.out.println("Size:"+size);
+            
+            DataEntry.header_length_large = size;
+            int run = 0;
+            
+            /*Used to Calculate Turn Around Time*/
             for(Entry<Integer,Job> child : jobs.entrySet())
             {
                 Job j = child.getValue();
                 Integer id = child.getKey();
-                turnaround.put(j.getFinish(), id);
+                DataEntry dEntry = new DataEntry();
+                
+                dEntry.id = id;
+                dEntry.start = j.getStart();
+                dEntry.end = j.getFinish();
+                dEntry.wait = j.getWaitTime();
+                dEntry.running = run + (j.getFinish() - j.getStart());
+                
+                run = dEntry.running;
+                
+                total += (j.getFinish() - j.getStart());
+                c++;
+                
+                dEntry.turnaround = total;
+                dEntry.chartEntry.setLength(size);
+
+                Integer key = 0;
+                Integer val = 0;
+                
+                try {
+                    for(Entry<Long, Integer> workers : j.getWork().entrySet())
+                    {
+                        key = workers.getKey().intValue();
+                        val = workers.getValue();
+
+                        dEntry.chartEntry.replace(key, key+1, "*");
+                    }
+                } catch(java.lang.StringIndexOutOfBoundsException ex) {
+                    System.out.println(key + " " + key.intValue());
+                    System.out.println(dEntry.chartEntry.length());
+                }
+                
+                col.add(dEntry);
             }
             
+            average = ((1.0 * total) / c);   
             
-            
-            
+            results.put(entry.getKey(),
+                    DataEntry.getHeader()+
+                    col.toString().replace("[","").replace("]","").replace(", ","")+
+                    "Average Turn-Around Time:"+average+
+                    System.getProperty("line.separator")
+            );
         }
+        
+        System.out.println(results.values().toString().replace("[","").replace("]","").replace(", ",""));
     }
     
     private static class DataEntry {
-        public char[] chartEntry;
+        public StringBuilder chartEntry = new StringBuilder();
         
         public int start;
         public int end;
         public int running;
         public int wait;
-        public int arrival;
         
         public int turnaround;
         public int id;
         
-        public int header_length_small = 5;
-        public int header_length_large = 30;
+        public static int header_length_small = 5;
+        public static int header_length_large = 30;
         
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
             
-            sb.append("Job"+String.format("%1$"+header_length_small+ "s",id));
-            sb.append("|"  +String.format("%1$"+header_length_small+ "s", arrival));
+            sb.append(String.format("%1$"+header_length_small+ "s",id));
             sb.append("|"  +String.format("%1$"+header_length_small+ "s",wait));
             sb.append("|"  +String.format("%1$"+header_length_small+ "s",start));
             sb.append("|"  +String.format("%1$"+header_length_small+ "s",end));
             sb.append("|"  +String.format("%1$"+header_length_small+ "s",running));
             sb.append("|"  +String.format("%1$"+header_length_small+ "s",turnaround));
-            sb.append("|"  +chartEntry.toString().replace(" ", "="));
+            sb.append("|"  +chartEntry.toString());
+            //sb.append("|"  +chartEntry.toString().replace(" ", "="));
 
-            return sb.toString();
+            return sb.toString()+System.getProperty("line.separator");
         }
         
-        public String getHeader()
+        public static String getHeader()
         {
             StringBuilder sb = new StringBuilder();
             sb.append(String.format("%-"+header_length_small+ "s","JobId"));
-            sb.append("|"  +String.format("%-"+header_length_small+ "s","Acpt."));
             sb.append("|"  +String.format("%-"+header_length_small+ "s","Wait"));
             sb.append("|"  +String.format("%-"+header_length_small+ "s","Start"));
             sb.append("|"  +String.format("%-"+header_length_small+ "s","End"));
@@ -112,7 +168,7 @@ public class SimpleGantt {
             }
             sb.append("|");
             
-            return top+System.getProperty("line.separator")+sb.toString();
+            return top+System.getProperty("line.separator")+sb.toString()+System.getProperty("line.separator");
         }
         
     }
