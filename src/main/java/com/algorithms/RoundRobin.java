@@ -10,7 +10,7 @@ import main.java.com.Job;
 
 /**
  *
- * @author Richard Coan
+ * @author 
  */
 public class RoundRobin {
     
