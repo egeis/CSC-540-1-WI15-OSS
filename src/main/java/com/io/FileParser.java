@@ -1,31 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package main.java.com.io;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
- * @author D14
+ * @author Richard Coan
  */
 public class FileParser {
     
-    public static List<Job> getJobs(String contents)
+    public static Map<Integer,Job> getJobs(String contents)
     {
-        List<Job> Jobs = new ArrayList<Job>();
-        int id = 0;
+        Map<Integer,Job> Jobs = new HashMap<Integer,Job>();
         
-        String[] contents_array = contents.split(System.getProperty("line.separator"));
+        String[] contents_array = contents
+                .split(System.getProperty("line.separator"));
         
         for(int i = 0; i < contents_array.length; i += 2) 
         {
-           Jobs.add(new Job(id, contents_array[i],Integer.parseInt(contents_array[i+1])));
-           id++;
+           Jobs.put(Integer.parseInt(contents_array[i].replace("Job", "")), 
+                   new Job(Integer.parseInt(contents_array[i+1])));
         }
         
         return Jobs;
