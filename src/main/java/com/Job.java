@@ -31,7 +31,19 @@ public class Job {
         this.ticks = 0;
         work.put(0L,0);             
     }
- 
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getFinish() {
+        return finish;
+    }
+
+    public int getWaitTime() {
+        return waitTime;
+    }    
+    
     public boolean isCompleted() {
         return completed;
     }
