@@ -24,12 +24,12 @@ public class Job {
      */
     private Map<Long, Integer> work = new HashMap();
 
-    public Job(int waitTime)
+    public Job(int waitTime, long counter)
     {
         this.waitTime = waitTime;
         this.completed = false;
         this.ticks = 0;
-        work.put(0L,0);             
+        work.put(counter,0);             
     }
 
     public int getStart() {

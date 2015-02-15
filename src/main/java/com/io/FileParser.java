@@ -20,7 +20,7 @@ public class FileParser {
         for(int i = 0; i < contents_array.length; i += 2) 
         {
            Jobs.put(Integer.parseInt(contents_array[i].replace("Job", "")), 
-                   new Job(Integer.parseInt(contents_array[i+1])));
+                   new Job(Integer.parseInt(contents_array[i+1]), 0L));
         }
         
         return Jobs;
