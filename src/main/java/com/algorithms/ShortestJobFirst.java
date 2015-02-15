@@ -20,6 +20,9 @@ public class ShortestJobFirst {
         Map<Integer, Job> tasks = new HashMap<Integer, Job>(jobs); //Clone jobs.
         
         //Do Stuff...
+        /**
+         * TO UPDATE a single clock tic call: Clock.doTick(job); where job is the Job you are updating.
+         */
         
         return tasks;
     }
