@@ -14,6 +14,9 @@ public class Job {
     private int ticks;
     private boolean completed;
     
+    private int start = 0;
+    private int finish = 0;
+    
     /** 
      * work progress used for gantt chart, 
      * 0 = Accepted at counter time.
@@ -44,7 +47,13 @@ public class Job {
     public void doTick(long counter)
     {
         if(++ticks == waitTime)
+        {
             completed = true;
+            finish = ticks;
+        }
+        
+        if(start == 0)
+            start = ticks;
         
         work.put(counter,ticks);
     }
