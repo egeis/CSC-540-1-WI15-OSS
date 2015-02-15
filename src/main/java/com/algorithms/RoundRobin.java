@@ -5,6 +5,7 @@
  */
 package main.java.com.algorithms;
 
+import java.util.HashMap;
 import java.util.Map;
 import main.java.com.Job;
 
@@ -14,9 +15,13 @@ import main.java.com.Job;
  */
 public class RoundRobin {
     
-    public static void run(Map<Integer, Job> jobs, long timeslice)
+    public static Map<Integer, Job> run(Map<Integer, Job> jobs, long timeslice)
     {
+        Map<Integer, Job> tasks = new HashMap<Integer, Job>(jobs); //Clone jobs.
         
+        //Do Stuff...
+        
+        return tasks;
     }
     
 }
