@@ -18,7 +18,12 @@ public class Scheduler {
     public static final int SJF  = 2; //Shorted Job First.
     public static final int RR3  = 3; //Round Robin Timeslice 3.
     public static final int RR5  = 4; //Round Robin Timeslice 5.
-        
+    
+    public static final String FCFS_NAME = "First-Come First-Served"; 
+    public static final String SJF_NAME  = "Shorted-Job First";
+    public static final String RR3_NAME  = "Round Robin (Timeslice 3)";
+    public static final String RR5_NAME  = "Round Robin (Timeslice 5)";
+    
     public static Map<Integer, Job> schedule(int type, Map<Integer, Job> jobs)
     {
         Map<Integer, Job> tasks = null;
